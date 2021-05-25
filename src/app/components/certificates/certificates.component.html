@@ -1,0 +1,58 @@
+<div class="header-options">
+    <button type="submit" class="btn btn-primary" (click)="downloadAllCertficate()">Download All</button>
+</div>
+<app-pdf-viewer *ngIf="documentViewer" (closePdfViewer)="closePdfViewer()" [pdfDataUri]="pdfDataUri"></app-pdf-viewer>
+<table class="table table-striped certificates">
+    <thead>
+        <tr>
+            <td><input type="checkbox" class="form-check-input"></td>
+            <td>View</td>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let certificate of certficates; index as i">
+            <td><input type="checkbox" class="form-check-input"></td>
+            <td name="view" (click)="openPdfViewer(certificate)">
+                <fa-icon [icon]="faFile"></fa-icon>
+            </td>
+            <td>
+                {{ certificate.firstName }}
+            </td>
+            <td>{{ certificate.lastName }}</td>
+            <td>{{ certificate.type }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Dynamic Certficate Printing -->
+
+<div style="opacity: 0; pointer-events:none;height: 0;">
+    <div id="certificate-viewer" *ngIf="certificateConfig">
+        <img class="studio-sqaure-logo" [src]="certificateConfig.headerLogo" />
+        <img class="background-image" [src]="certificateConfig.backgroundImage" />
+        <div class="year-field" *ngIf="!certificateConfig.dynamic">{{ certificateConfig.year }}</div>
+        <div class="dynamic-info" *ngIf="certificateConfig.dynamic">
+            <div class="name-label" type='member'>{{ certificateConfig.dynamicFields.member }}</div>
+            <div class="name-label" type='full-name'>{{ certificateConfig.dynamicFields.fullName }}</div>
+            <div class="name-label" type='grading-date'>{{ certificateConfig.dynamicFields.gradingDate }}</div>
+            <div class="name-label" type="achieved">{{ certificateConfig.dynamicFields.achieved }}</div>
+            <span class="name-label" type="studio-name">{{ certificateConfig.dynamicFields.studioName }}</span>
+        </div>
+        <div class="signature-info">
+            <div class="persoan-info">
+                <pre>
+                       {{ certificateConfig.signatureInfo.personInfo }}
+                </pre>
+            </div>
+            <div class="sub-heading" *ngIf="certificateConfig.signatureInfo.subheadingTitle">
+                <div class="heading">{{ certificateConfig.signatureInfo.subheadingTitle }}</div>
+                <div class="detail">{{ certificateConfig.signatureInfo.subheadingValue }}</div>
+            </div>
+        </div>
+        <img class="signature-logo" [src]="certificateConfig.signatureImage" />
+        <img class="studio-rounded-logo" [src]="certificateConfig.footerLogo" />
+    </div>
+</div>
